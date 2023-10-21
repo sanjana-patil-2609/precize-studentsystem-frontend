@@ -1,17 +1,11 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { baseUrl, initialStudentState } from '../common/common';
 
 export default function AddStudent() {
     const navigate = useNavigate();
-    const [student, setStudent] = useState({
-        name: "",
-        address: "",
-        city: "",
-        country: "",
-        pincode: "",
-        satScore: ""
-    })
+    const [student, setStudent] = useState(initialStudentState)
     const [errorMessage, setErrorMessage] = useState("")
 
     const onInputChange = (e) => {
@@ -23,7 +17,7 @@ export default function AddStudent() {
 
         validateDetails();
 
-        await axios.post("http://localhost:8080/student/add", {
+        await axios.post(`${baseUrl}/add`, {
             ...student, "satScore" : parseInt(student.satScore)
         })
 
@@ -33,7 +27,6 @@ export default function AddStudent() {
     const validateDetails = () => {
         // Basic validation
         const errors = []
-        console.log(student)
         if (student.name === '') {
             errors.push("Name")
         }
@@ -59,7 +52,6 @@ export default function AddStudent() {
     const getErrorMessage = (error) => {
         let str = "";
         const size = error?.length;
-        console.log(error)
         if (size === 0) {
             setErrorMessage("")
             return
